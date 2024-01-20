@@ -1,0 +1,20 @@
+.sidebar-button {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: 2px solid black;
+    padding: 7px;
+    transition-duration: 50ms;
+    &:hover {
+        scale: 1.05;
+    }
+    &:active {
+        scale: 1;
+        background-color: #bbbbbb;
+    }
+}
+
+.button-img {
+    width: 36px;
+    height: 36px;
+}
