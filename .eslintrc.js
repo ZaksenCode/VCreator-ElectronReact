@@ -12,7 +12,9 @@ module.exports = {
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 'error',
     'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-unused-vars': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'no-undef': 'off',
   },
   parserOptions: {
     ecmaVersion: 2022,

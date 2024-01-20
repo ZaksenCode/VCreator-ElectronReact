@@ -1,19 +1,12 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.png';
-import './App.css';
-import Sidebar from './components/sidebar/Sidebar';
-
-function Hello() {
-  return (
-    <Sidebar />
-  );
-}
+import './App.scss';
+import Layout from './components/layout/Layout';
 
 export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Hello />} />
+        <Route path="/" element={<Layout />} />
       </Routes>
     </Router>
   );

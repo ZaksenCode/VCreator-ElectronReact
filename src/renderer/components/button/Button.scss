@@ -1,0 +1,27 @@
+@use "sass:map";
+@import '../../variables';
+
+
+.v_button {
+  display: block;
+  width: 100%;
+  min-width: 200px;
+  padding-bottom: 8px;
+  padding-top: 8px;
+  border-radius: 20px;
+
+  color: #FFF;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+
+  &.primary {
+    background-color: map.get($colors, "primary_button");
+    border: 4px solid map.get($colors, "primary_button_outline");
+  }
+
+  &:active {
+    background-color: map.get($colors, "primary_button_outline");
+  }
+}
