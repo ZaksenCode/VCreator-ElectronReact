@@ -1,13 +1,8 @@
-import {
-  MemoryRouter as Router,
-  Routes,
-  Route,
-  HashRouter,
-} from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import './App.scss';
-import './fonts.css';
+import './fonts.scss';
+
 import React, { useState } from 'react';
-import Layout from './components/layout/Layout';
 import Sidebar from './components/sidebar/Sidebar';
 import Header from './components/header/Header';
 
@@ -24,13 +19,13 @@ function TestContent3() {
 }
 
 export default function App() {
-  const [activeContent, setActiveContent] = useState('content1');
+  // const [activeContent, setActiveContent] = useState('content1');
 
   return (
     <div className="layout">
       <Sidebar />
       <div style={{ flex: 1, alignItems: 'flex-start' }}>
-        <Header />
+        <Header title="34" />
         <Routes>
           <Route path="/" element={<TestContent1 />} />
           <Route path="/test2" element={<TestContent2 />} />

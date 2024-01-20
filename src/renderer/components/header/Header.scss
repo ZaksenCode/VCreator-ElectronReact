@@ -1,11 +1,12 @@
 header {
   display: flex;
   background-color: #F6B17A;
-  padding: 0;
+  padding: 0 0 0 10px;
   margin: 0;
   height: 50px;
-  &.title {
+  .title {
     color: #000;
+    font-family: "IBM";
     font-size: 35px;
     font-style: normal;
     font-weight: 600;
