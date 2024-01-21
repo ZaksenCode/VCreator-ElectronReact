@@ -5,13 +5,23 @@ import './fonts.scss';
 import React, { useState } from 'react';
 import Sidebar from './components/sidebar/Sidebar';
 import Header from './components/header/Header';
+import CheckBox from './components/value/CheckBox';
+import Browser from './components/browser/Browser';
 
 function TestContent1() {
-  return <div>Content 1</div>;
+  return (
+  <div>
+    <Browser />
+  </div>
+  )
 }
 
 function TestContent2() {
-  return <div>Content 2</div>;
+  return (
+  <div>
+    <CheckBox valueName='Скрытый:' valueDescription='Тег какойто' />
+  </div>
+  )
 }
 
 function TestContent3() {
@@ -25,7 +35,7 @@ export default function App() {
     <div className="layout">
       <Sidebar />
       <div style={{ flex: 1, alignItems: 'flex-start' }}>
-        <Header title="34" />
+        <Header />
         <Routes>
           <Route path="/" element={<TestContent1 />} />
           <Route path="/test2" element={<TestContent2 />} />

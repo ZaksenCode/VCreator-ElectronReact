@@ -1,0 +1,28 @@
+.browser {
+    background-color: #2D3250;
+    border-radius: 8px;
+    overflow-y: auto;
+    height: 300px;
+    padding: 10px;
+}
+
+::-webkit-scrollbar {
+    width: 20px;
+    position: absolute;
+    left: 0;
+}
+
+::-webkit-scrollbar-track {
+    width: 20px;
+    background-color: #872341;
+    border-radius: 8px;
+    margin: 10px 0px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #BE3144;
+    border-radius: 8px;
+    background-clip: content-box;
+    min-width: 20px;
+    min-height: 20px;
+}

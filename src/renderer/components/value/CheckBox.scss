@@ -1,0 +1,36 @@
+.value-box {
+    border-radius: 8px;
+    display: flex;
+    gap: 10px;
+    padding: 0px 10px;
+    font-family: "IBM";
+    font-size: 18px;
+}
+
+.value-box-background {
+    width: calc(100% - 60px);
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5px 0 10px;
+    background-color: #22092C;
+    border-radius: 8px;
+}
+
+.value-box-name {
+    color: #ffffff;
+    font-weight: 500;
+    margin: auto 0;
+}
+
+.value-box-checkbox {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    margin: auto 0;
+    background-color: brown !important;
+}
+
+.value-box-checkbox:checked {
+    background-color: rgb(97, 165, 42);
+}
