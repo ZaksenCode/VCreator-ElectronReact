@@ -1,0 +1,82 @@
+.value-box {
+    border-radius: 8px;
+    display: flex;
+    gap: 10px;
+    padding: 0px 10px;
+    font-family: "IBM";
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.value-box-background {
+    width: calc(100% - 60px);
+    height: 40px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5px 0 10px;
+    background-color: #22092C;
+    border-radius: 8px;
+}
+
+.value-box-name {
+    color: #ffffff;
+    margin: auto 0;
+}
+  
+.value-box-dropdown {
+    position: relative;
+    display: inline-block;
+    width: 140px;
+    font-family: "IBM";
+    margin: auto 0;
+    border-radius: 8px;
+
+    &:hover {
+        .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-button {
+            background-color: #dddddd;
+            width: 140px;
+        }
+    }
+}
+
+.dropdown-button {
+    display: flex;
+    justify-content: space-between;
+    background-color: #ffffff;
+    font-family: "IBM";
+    border: none;
+    width: 140px;
+    height: 28px;
+    border-radius: 8px;
+    text-align: left;
+    font-size: 18px;
+    color: #000000;
+}
+
+.dropdown-arrow {
+    width: 20px;
+    height: 20px;
+    margin: auto 0 auto auto;
+}
+  
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    width: 140px;
+    z-index: 1;
+
+    a {
+        color: #000000;
+        text-decoration: none;
+        display: block;
+        margin-left: 8px;
+        &:hover {
+            background-color: #ddd;
+        }
+    }
+}

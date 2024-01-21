@@ -1,6 +1,6 @@
 import './Browser.scss';
 
-function Browser() {
+function Browser(props: any) {
     return (
         <div className="browser">
             

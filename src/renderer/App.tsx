@@ -7,6 +7,8 @@ import Sidebar from './components/sidebar/Sidebar';
 import Header from './components/header/Header';
 import CheckBox from './components/value/CheckBox';
 import Browser from './components/browser/Browser';
+import SettingsBox from './components/value/SettingsBox';
+import ComboBox from './components/value/ComboBox';
 
 function TestContent1() {
   return (
@@ -19,7 +21,9 @@ function TestContent1() {
 function TestContent2() {
   return (
   <div>
-    <CheckBox valueName='Скрытый:' valueDescription='Тег какойто' />
+    <CheckBox valueName='Скрытый:' valueDescription='Тег какой-то' />
+    <SettingsBox valueName='Текстура:' valueDescription='Тег какой-то' />
+    <ComboBox valueName='Модель:' valueDescription='Тег какой-то' />
   </div>
   )
 }

@@ -1,4 +1,4 @@
-import './CheckBox.scss';
+import './SettingsBox.scss';
 import HelpButton from '../button/HelpButton';
 
 interface ValueBoxProps {
@@ -13,9 +13,9 @@ function CheckBox(props: ValueBoxProps) {
                 <div className="value-box-name">
                     {props.valueName}
                 </div>
-                <input className='value-box-checkbox' type="checkbox">
-
-                </input>
+                <button className='value-box-settings'>
+                    Настройки
+                </button>
             </div>
             <HelpButton onClick={() => { console.log("Help me!")}} />
         </div>
