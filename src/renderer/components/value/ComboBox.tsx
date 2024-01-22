@@ -1,10 +1,12 @@
 import './ComboBox.scss';
 import HelpButton from '../button/HelpButton';
 import DropdownIcon from '../../../../assets/art/icons8-arrow-down-50.png';
+import { ReactNode } from 'react';
 
 interface ValueBoxProps {
     valueName: string
     valueDescription: string
+    boxValues: Array<string>
 }
 
 function CheckBox(props: ValueBoxProps) {
@@ -16,20 +18,28 @@ function CheckBox(props: ValueBoxProps) {
                 </div>
                 <div className="value-box-dropdown">
                     <button className="dropdown-button">
-                        block
+                        {props.boxValues[0]}
                         <img className='dropdown-arrow' src={DropdownIcon}></img>
                     </button>
                     <div className="dropdown-content">
-                        <a href="#">block</a>
-                        <a href="#">none</a>
-                        <a href="#">X</a>
-                        <a href="#">aabb</a>
+                        {
+                            ConvertToObj(props.boxValues)
+                        }
                     </div>
                 </div> 
             </div>
             <HelpButton onClick={() => { console.log("Help me!")}} />
         </div>
     )
+}
+
+function ConvertToObj(array: Array<string>) {
+    var result: string = "";
+    for (let index = 0; index < array.length; index++) {
+        result += <button> + array[index] + </button>;
+    }
+    console.log(result);
+    return result;
 }
 
 export default CheckBox;
