@@ -1,5 +1,6 @@
 import './CheckBox.scss';
 import HelpButton from '../button/HelpButton';
+import CheckMark from '../../../../assets/art/Check.svg';
 
 interface ValueBoxProps {
     valueName: string
@@ -13,9 +14,10 @@ function CheckBox(props: ValueBoxProps) {
                 <div className="value-box-name">
                     {props.valueName}
                 </div>
-                <input className='value-box-checkbox' type="checkbox">
-
-                </input>
+                <div className="checkbox-container">
+                    <input className='value-box-checkbox' type="checkbox"></input>
+                    <img className='checkmark' src={CheckMark}></img>
+                </div>
             </div>
             <HelpButton onClick={() => { console.log("Help me!")}} />
         </div>

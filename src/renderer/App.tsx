@@ -9,11 +9,11 @@ import CheckBox from './components/value/CheckBox';
 import Browser from './components/browser/Browser';
 import SettingsBox from './components/value/SettingsBox';
 import ComboBox from './components/value/ComboBox';
+import NumberInt from './components/value/NumberInt';
 
 function TestContent1() {
   return (
   <div>
-    <Browser />
   </div>
   )
 }
@@ -24,6 +24,7 @@ function TestContent2() {
     <CheckBox valueName='Скрытый:' valueDescription='Тег какой-то' />
     <SettingsBox valueName='Текстура:' valueDescription='Тег какой-то' />
     <ComboBox valueName='Модель:' valueDescription='Тег какой-то' />
+    <NumberInt valueName='Группа отрисовки:' valueDescription='Тег какой-то' />
   </div>
   )
 }
