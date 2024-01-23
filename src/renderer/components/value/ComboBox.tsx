@@ -23,7 +23,10 @@ function CheckBox(props: ValueBoxProps) {
                     </button>
                     <div className="dropdown-content">
                         {
-                            ConvertToObj(props.boxValues)
+                            props.boxValues.map(
+                            (part) => {return <button className='dropdown-button-content' onClick={() => console.log("Select: " + part)}>
+                                {part}
+                            </button>})
                         }
                     </div>
                 </div> 

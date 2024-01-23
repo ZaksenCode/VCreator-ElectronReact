@@ -7,7 +7,7 @@ import './BlockBrowser.scss';
 
 function Browser(props: any) {
     return (
-        <div className="browser">
+        <div className="browser block-browser">
             <CheckBox valueName='Скрытый:' valueDescription='Тег какой-то' />
             <CheckBox valueName='Светопроводимость:' valueDescription='Тег какой-то' />
             <CheckBox valueName='Солнечная светопроводимость:' valueDescription='Тег какой-то' />

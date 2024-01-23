@@ -1,0 +1,16 @@
+.project-data-browser {
+    width: calc(100% - 20px);
+    height: 136px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+    gap: 4px;
+}
+
+.project-value {
+    color: #ffffff;
+    font-family: "IBM";
+    font-weight: 500;
+    font-size: 20px;
+}
