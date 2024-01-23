@@ -1,8 +1,12 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import { ModStructure } from '../types';
 
-export type Channels = 'ipc-example';
+export type Channels =
+  | 'ipc-example'
+  | 'open-directory-dialog'
+  | 'read-mod-structure';
 
 const electronHandler = {
   ipcRenderer: {
@@ -20,6 +24,14 @@ const electronHandler = {
     },
     once(channel: Channels, func: (...args: unknown[]) => void) {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
+    },
+    invokeOpenDirectoryDialog: async (): Promise<string[]> => {
+      return ipcRenderer.invoke('open-directory-dialog');
+    },
+    invokeReadModStructure: async (
+      modPath: string,
+    ): Promise<ModStructure | null> => {
+      return ipcRenderer.invoke('read-mod-structure', modPath);
     },
   },
 };

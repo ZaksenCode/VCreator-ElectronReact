@@ -9,11 +9,11 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-import { resolveHtmlPath } from './util';
+import { resolveHtmlPath, readModStructure } from './util';
 
 class AppUpdater {
   constructor() {
@@ -137,3 +137,22 @@ app
     });
   })
   .catch(console.log);
+
+// Открытие диаога выбора директории
+ipcMain.handle('open-directory-dialog', async () => {
+  // Открытие диалога выбора папки
+  const result = await dialog.showOpenDialog({
+    properties: ['openDirectory'],
+  });
+  return result.filePaths; // Возвращает массив выбранных путей
+});
+
+// Чтение структуры мода
+ipcMain.handle('read-mod-structure', async (event, modPath: string) => {
+  try {
+    return readModStructure(modPath);
+  } catch (error) {
+    console.error('Failed to read mod structure:', error);
+    return null;
+  }
+});
