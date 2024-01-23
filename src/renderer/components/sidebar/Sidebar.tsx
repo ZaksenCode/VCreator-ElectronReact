@@ -31,7 +31,7 @@ function Sidebar() {
             <SidebarButton
               buttonImg={block}
               onClick={() => {
-                navigate('/test2');
+                navigate('/block-edit');
               }}
             />
             <SidebarButton
