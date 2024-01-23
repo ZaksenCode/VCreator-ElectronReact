@@ -65,17 +65,33 @@
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f1f1f1;
+    background-color: #ffffff00;
     width: 140px;
     z-index: 1;
 
-    a {
-        color: #000000;
-        text-decoration: none;
-        display: block;
-        margin-left: 8px;
-        &:hover {
-            background-color: #ddd;
-        }
+    :first-child {
+        border-radius:8px 8px 0 0 ;
+        border-top:  #000000 solid 4px;
+    }
+
+    :last-child {
+        border-radius: 0 0 8px 8px;
+        border-bottom:  #000000 solid 4px;
+    }
+}
+
+.dropdown-button-content {
+    font-family: "IBM";
+    font-size: 18px;
+    font-weight: 500;
+    text-decoration: none;
+    display: block;
+    border: 0;
+    width: 100%;
+    border-left: #000000 solid 4px;
+    border-right: #000000 solid 4px;
+
+    &:hover {
+        background-color: #adadad;
     }
 }

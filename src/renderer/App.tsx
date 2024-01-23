@@ -6,24 +6,53 @@ import React, { useState } from 'react';
 import Sidebar from './components/sidebar/Sidebar';
 import Header from './components/header/Header';
 import BlockBrowser from './components/browser/BlockBrowser';
+import FolderBrowser from './components/browser/FolderBrowser';
+import ProjectDataBrowser from './components/browser/ProjectDataBrowser';
+import Button, { ButtonType } from './components/button/Button';
 
-function TestContent1() {
+function Content1() {
   return (
-  <div>
+  <div className="content-1">
+    <ProjectDataBrowser version='0' author='none' description='none' tags='none' />
+    <div className="content-1-other">
+      <div className="content-1-buttons">
+        <Button text="Версия" onClick={() => { console.log("Verison"); } } type={ButtonType.Primary} />
+        <Button text="Автор" onClick={() => { console.log("Author"); } } type={ButtonType.Primary} />
+        <Button text="Описание" onClick={() => { console.log("Description"); } } type={ButtonType.Primary} />
+        <Button text="Теги" onClick={() => { console.log("Tags"); } } type={ButtonType.Primary} />
+      </div>
+      <div className="content-1-wip">
+        Данная вкладка в разработки и не выполняет никакого функционала!
+      </div>
+    </div>
+    <Button text="Загрузить контент пак" onClick={() => { console.log("Load pack"); } } type={ButtonType.Primary} />
   </div>
   )
 }
 
-function TestContent2() {
+function Content2() {
   return (
-  <div>
+  <div className="content-2">
+    <FolderBrowser />
     <BlockBrowser />
   </div>
   )
 }
 
-function TestContent3() {
-  return <div>Content 3</div>;
+function Content3() {
+  return (
+  <div className="content-3">
+    
+  </div>
+  );
+}
+
+function Content4() {
+  return (
+  <div className="content-4">
+    
+  </div>
+  );
 }
 
 export default function App() {
@@ -35,9 +64,9 @@ export default function App() {
       <div style={{ flex: 1, alignItems: 'flex-start' }}>
         <Header />
         <Routes>
-          <Route path="/" element={<TestContent1 />} />
-          <Route path="/test2" element={<TestContent2 />} />
-          <Route path="/test3" element={<TestContent3 />} />
+          <Route path="/" element={<Content1 />} />
+          <Route path="/test2" element={<Content2 />} />
+          <Route path="/test3" element={<Content3 />} />
         </Routes>
       </div>
     </div>
