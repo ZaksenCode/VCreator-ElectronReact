@@ -1,0 +1,40 @@
+.mod-select-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 10px;
+  overflow-y: auto;
+  button {
+    padding: 2px 0 2px 0;
+    margin: 0;
+  }
+
+  .mod-actions {
+    display: flex;
+  }
+
+  .button-group {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+  }
+
+  .spacer {
+    flex-grow: 1;
+  }
+
+  .action-info {
+    flex-grow: 1;
+    align-items: center;
+    color:#ffffff;
+    font-family: "IBM";
+    font-size: 20px;
+    font-weight: 600;
+    margin-left: 10px;
+    text-align: center;
+  }
+}
+

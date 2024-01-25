@@ -1,0 +1,31 @@
+.block-editor {
+  display: flex;
+  flex-grow: 1;
+  overflow-y: auto;
+  .container-directory-column {
+    flex-direction: column;
+    background-color: transparent;
+    margin-right: 10px;
+    padding: 0;
+    button {
+      padding: 0;
+      margin: 0 0 10px 0;
+    }
+
+    .container-directory-view {
+      flex-direction: column;
+      flex-grow: 1;
+      flex-shrink: 1;
+      width: 200px;
+      overflow-y: auto;
+
+    }
+  }
+
+  .container-block-parameters {
+    flex-grow: 1; // Растягивается на всё доступное пространство
+    overflow-y: auto;
+  }
+}
+
+

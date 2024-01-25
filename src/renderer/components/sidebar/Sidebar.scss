@@ -1,13 +1,14 @@
 .sidebar {
-    width: 64px;
-    min-height: 100%;
-    background-color: #7077A1;
+  width: 64px;
+  min-height: 100%;
+  background-color: #7077A1;
+  flex-shrink: 0;
 }
 
 .sidebar-content {
-    margin: 8px auto auto auto;
-    width: 56px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  margin: 8px auto auto auto;
+  width: 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }

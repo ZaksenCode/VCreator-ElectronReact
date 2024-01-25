@@ -1,16 +1,15 @@
-import './Browser.scss';
-import './ProjectDataBrowser.scss';
+import './ModInfo.scss';
 
-interface ProjectDataProps {
+interface ModInfoProps {
     version: string,
     author: string,
     description: string,
     tags: string,
 }
 
-function Browser(props: ProjectDataProps) {
+export default function ModInfo(props: ModInfoProps) {
     return (
-        <div className="browser project-data-browser">
+        <div className="mod-info">
             <div className="project-value project-version">
                 Версия: {props.version}
             </div>
@@ -26,5 +25,3 @@ function Browser(props: ProjectDataProps) {
         </div>
     )
 }
-
-export default Browser;
