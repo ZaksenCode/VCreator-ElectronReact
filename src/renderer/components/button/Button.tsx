@@ -1,5 +1,4 @@
 import './Button.scss';
-import ClassUtils from '../../../main/utils/classes';
 
 export enum ButtonType {
   Primary = 'primary',
@@ -12,15 +11,11 @@ interface ButtonProps {
 }
 
 function Button({ onClick, text, type }: ButtonProps) {
-  const classes = {
-    v_button: true,
-    [type]: true,
-  };
-  const buttonClassNames = ClassUtils.classNames(classes);
+  const classes = `v_button ${type}`
   return (
     <button
       type="button"
-      className={buttonClassNames}
+      className={classes}
       onClick={() => onClick()}
     >
       <span className="button_span">{text}</span>

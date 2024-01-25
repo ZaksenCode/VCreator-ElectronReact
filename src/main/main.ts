@@ -14,6 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath, readModStructure } from './util';
+import fs from 'fs';
 
 class AppUpdater {
   constructor() {
@@ -156,3 +157,18 @@ ipcMain.handle('read-mod-structure', async (event, modPath: string) => {
     return null;
   }
 });
+
+ipcMain.handle('save-json-changes', async (event, { path, content }) => {
+  try {
+    console.log(path)
+    console.log(content)
+    const jsonContent = JSON.stringify(content, null, 2);
+    fs.writeFileSync(path, jsonContent, 'utf-8');
+    return true
+  } catch (error) {
+    console.error('Ошибка при сохранении блока:', error);
+    return false
+  }
+});
+
+

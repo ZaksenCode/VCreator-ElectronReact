@@ -4,7 +4,8 @@ import DirectoryView from '../../components/directory_view/DirectoryView';
 import BlockParameters from './block_parameters/BlockParameters';
 import Button, { ButtonType } from '../../components/button/Button';
 import { ModContext } from '../../contexts/ModContext';
-import { Directory, File } from '../../../types';
+import { Block, Directory, File } from '../../../types';
+import { findFileByPath } from '../../utils';
 
 export default function BlockEditor() {
   const modContext = useContext(ModContext);
@@ -13,7 +14,33 @@ export default function BlockEditor() {
     dir.type == 'directory' && dir.name == 'blocks'
   ) as Directory | undefined;
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const updateBlock = (updatedBlock: Block) => {
+    if (modContext?.selectedFile != null && modContext != null) {
+      window.electron.ipcRenderer.invokeSaveFileChanges(modContext?.selectedFile.path, updatedBlock)
+        .then(result => {
+          if (result && modContext.modPath != null) {
+            // TODO Показать индикатор загрузки или сообщение о начале обновления структуры мода
+            window.electron.ipcRenderer.invokeReadModStructure(modContext.modPath)
+              .then(structure => {
+                if (structure == null || modContext.selectedFile == null) return
+                const updatedSelectedFile = findFileByPath(structure, modContext.selectedFile.path);
+                modContext.setModStructure(structure);
+                if (updatedSelectedFile) {
+                  modContext.setSelectedFile(updatedSelectedFile);
+                }
+
+                // TODO  Скрыть индикатор загрузки или показать сообщение об успешном обновлении
+              })
+              .catch(error => {
+                // TODO  Обработка ошибок при чтении структуры мода
+              });
+          }
+        })
+        .catch(error => {
+          // TODO Обработка ошибок при сохранении файла
+        });
+    }
+  };
 
   return (
     <div className='block-editor'>
@@ -25,7 +52,8 @@ export default function BlockEditor() {
             blocks_dir != undefined ?
               <DirectoryView
                 directory={blocks_dir}
-                onSelect={(file) => setSelectedFile(file)}
+                selectedFile={modContext?.selectedFile ? modContext.selectedFile : null}
+                onSelect={(file) => modContext?.setSelectedFile(file)}
               /> : 'Ошибка загрузки'
           }
         </div>
@@ -33,9 +61,11 @@ export default function BlockEditor() {
 
       <div className='container container-block-parameters'>
         {
-          selectedFile == null ?
-            <BlockDontSelected/> :
-            <BlockParameters />
+          modContext?.selectedFile == null ?
+            <BlockDontSelected /> :
+            <BlockParameters blockFile={modContext.selectedFile} onEdit={(block) => {
+              updateBlock(block);
+            }} />
         }
       </div>
     </div>
@@ -43,7 +73,7 @@ export default function BlockEditor() {
 }
 
 function BlockDontSelected() {
-  return <div className="block-dont-selected">
+  return <div className='block-dont-selected'>
     <div>Блок не выбран</div>
-  </div>
+  </div>;
 }

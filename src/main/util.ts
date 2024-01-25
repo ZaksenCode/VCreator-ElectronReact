@@ -2,7 +2,7 @@
 import { URL } from 'url';
 import path from 'path';
 import fs from 'fs';
-import { ModStructure } from '../types';
+import { Directory, ModStructure, File} from '../types';
 
 export function resolveHtmlPath(htmlFileName: string) {
   if (process.env.NODE_ENV === 'development') {
@@ -25,12 +25,14 @@ export function readModStructure(currentPath: string): ModStructure {
         name: dirent.name,
         type: 'directory',
         children: readModStructure(fullPath),
-      };
+        path: fullPath
+      } as Directory;
     }
     return {
       name: dirent.name,
       type: 'file',
       content: fs.readFileSync(fullPath, 'utf8'),
-    };
+      path: fullPath
+    } as File;
   });
 }

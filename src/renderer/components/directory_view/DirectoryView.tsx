@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 interface DirectoryViewProps {
   directory: Directory;
-
+  selectedFile: File | null
   onSelect(file: File): void;
 }
 
@@ -13,12 +13,10 @@ interface DirectoryViewProps {
  * @constructor
  */
 export default function DirectoryView(
-  { directory, onSelect }: DirectoryViewProps
+  { directory, onSelect, selectedFile}: DirectoryViewProps
 ) {
-  const [selectedItem, setSelectedItem] = useState<Directory | File | null>(null);
 
   const handleItemClick = (item: Directory | File) => {
-    setSelectedItem(item);
     if (item.type == 'file') {
       onSelect(item)
     }
@@ -31,7 +29,7 @@ export default function DirectoryView(
           role='button'
           tabIndex={0}
           key={`${child.name}_${child.type}`}
-          className={`directory-item ${child.type} ${child === selectedItem ? 'selected' : ''}`}
+          className={`directory-item ${child.type} ${child === selectedFile ? 'selected' : ''}`}
           onClick={() => handleItemClick(child)}
         >
           {child.name}

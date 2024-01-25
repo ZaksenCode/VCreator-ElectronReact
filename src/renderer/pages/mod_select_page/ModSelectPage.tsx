@@ -6,11 +6,13 @@ import "./ModSelectPage.scss"
 
 export default function ModSelectPage() {
   const { setModStructure, setModPath, setModName } = useContext(ModContext)!;
+
   const readModStructure = async (dirPath: string) => {
     const structure =
       await window.electron.ipcRenderer.invokeReadModStructure(dirPath);
     setModStructure(structure);
   };
+
   const openFolderDialog = async () => {
     const paths = await window.electron.ipcRenderer.invokeOpenDirectoryDialog();
     if (paths && paths.length > 0) {

@@ -4,17 +4,20 @@ import React, {
   Dispatch,
   SetStateAction,
   ReactNode,
-  useMemo,
+  useMemo
 } from 'react';
-import { ModStructure } from '../../types';
+import { File, ModStructure } from '../../types';
 
 interface ModContextType {
   modStructure: ModStructure | null;
   modPath: string | null;
   modName: string | null;
+  selectedFile: File | null;
   setModStructure: Dispatch<SetStateAction<ModStructure | null>>;
   setModPath: Dispatch<SetStateAction<string | null>>;
   setModName: Dispatch<SetStateAction<string | null>>;
+  setSelectedFile: Dispatch<SetStateAction<File | null>>;
+  // updateFileInModStructure(fileName: string, fileContent: Block): void
 }
 
 export const ModContext = createContext<ModContextType | null>(null);
@@ -27,6 +30,7 @@ export function ModProvider({ children }: ModProviderProps) {
   const [modStructure, setModStructure] = useState<ModStructure | null>(null);
   const [modPath, setModPath] = useState<string | null>(null);
   const [modName, setModName] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
   // Использование useMemo для мемоизации объекта контекста
   const contextValue = useMemo(
@@ -37,11 +41,14 @@ export function ModProvider({ children }: ModProviderProps) {
       setModPath,
       modName,
       setModName,
+      selectedFile,
+      setSelectedFile
     }),
-    [modStructure, setModStructure, modPath, setModPath, modName, setModName],
+    [modStructure, setModStructure, modPath, setModPath, modName, setModName, selectedFile, setSelectedFile]
   );
 
   return (
     <ModContext.Provider value={contextValue}>{children}</ModContext.Provider>
   );
 }
+
