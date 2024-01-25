@@ -1,3 +1,26 @@
 .directory-view {
   flex-grow: 1;
+  padding: 4px 6px;
+
+  .directory-item {
+    color: white;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 4px;
+    margin: 4px 0;
+    border-radius: 4px;
+    &:hover {
+      background-color: #282c42;
+    }
+    &.selected{
+      background-color: #282c42;
+    }
+  }
+  .file {
+
+  }
+
+  .directory {
+
+  }
 }
