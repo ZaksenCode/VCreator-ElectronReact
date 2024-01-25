@@ -18,7 +18,7 @@
       flex-direction: column;
       flex-grow: 1;
       flex-shrink: 1;
-      width: 200px;
+      min-width: 200px;
       overflow-y: auto;
       padding: 0;
     }

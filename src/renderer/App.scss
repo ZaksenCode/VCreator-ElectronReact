@@ -140,4 +140,9 @@ body {
   min-width: 20px;
   min-height: 20px;
 }
+
+::-webkit-scrollbar-corner {
+  opacity: 0;
+}
+
 //----End СкроллБар-------
