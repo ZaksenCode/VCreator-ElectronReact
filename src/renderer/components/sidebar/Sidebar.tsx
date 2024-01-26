@@ -43,7 +43,7 @@ function Sidebar() {
             <SidebarButton
               buttonImg={item}
               onClick={() => {
-                redirect('/test3');
+                redirect('/item-edit');
               }}
             />
           </>

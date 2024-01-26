@@ -8,6 +8,7 @@ import Header from './components/header/Header';
 import ModSelectPage from './pages/mod_select_page/ModSelectPage';
 import { ModContext, ModProvider } from './contexts/ModContext';
 import BlockEditor from './pages/block_editor_page/BlockEditor';
+import ItemEditor from './pages/item_editor_page/ItemEditor';
 
 export default function App() {
   const modContext = useContext(ModContext);
@@ -33,6 +34,7 @@ export default function App() {
               <Route path='/' element={<ModSelectPage />} />
               <Route path='/block-edit' element={<BlockEditor />} />
               <Route path='/test3' element={<BlockEditor />} />
+              <Route path='/item-edit' element={<ItemEditor />} />
             </Routes>
           </div>
         </div>

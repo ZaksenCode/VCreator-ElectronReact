@@ -1,7 +1,15 @@
 export interface Block {
-  "texture": string
+  "texture": string,
   "draw-group": number,
   "light-passing": boolean
+}
+
+export interface Item {
+  "icon-type": string,
+  "icon": string,
+  "placing-block": string,
+  "emission": number[],
+  "stack-size": number
 }
 
 export interface File {
