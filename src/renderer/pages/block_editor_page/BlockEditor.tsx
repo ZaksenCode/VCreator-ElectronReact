@@ -4,8 +4,9 @@ import DirectoryView from '../../components/directory_view/DirectoryView';
 import BlockParameters from './block_parameters/BlockParameters';
 import Button, { ButtonType } from '../../components/button/Button';
 import { ModContext } from '../../contexts/ModContext';
-import { Block, Directory } from '../../../types';
+import { Block, Directory, FileMetadata } from '../../../types';
 import CreateFileModal from '../../components/modal/create_file_modal/CreateFileModal';
+import { parseJson } from '../../utils';
 
 export default function BlockEditor() {
   const modContext = useContext(ModContext);
@@ -28,24 +29,31 @@ export default function BlockEditor() {
         // TODO Показывает алерт с ошибкой записи
         return;
       }
-
-      // Если успешно сохранили файл, то нужно обновить BlockParameters для повторной загрузки контента блока
-      setLastUpdated(Date.now());
+      modContext.setContentFile(jsonContent);
     }
   };
 
+  const selectFile = async (selectedFile: FileMetadata) => {
+    modContext?.setSelectedFile(selectedFile);
+    modContext?.loadFileContent(selectedFile.path).then(content => {
+      content && modContext?.setContentFile(content);
+    });
+  };
+
   const handleCreateBlockModalSubmit = async (newName: string) => {
-    const filePath = `${blocks_dir?.path}/${newName}.json`
+    const filePath = `${blocks_dir?.path}/${newName}.json`;
     const newBlock: Block = {
-      texture: "",
+      texture: '',
       'light-passing': false,
-      'draw-group': 0
-    }
+      'draw-group': 0,
+      hitbox: [0, 0, 0, 1, 1, 1],
+      rotation: 'none',
+    };
     const jsonContent = JSON.stringify(newBlock, null, 2);
-    const resultAddFile = await modContext?.addNewFile(filePath, jsonContent)
+    const resultAddFile = await modContext?.addNewFile(filePath, jsonContent);
     if (!resultAddFile || !modContext?.modPath) {
       // TODO показываем ошибку добавления блока
-      return
+      return;
     }
 
     const structure =
@@ -58,7 +66,7 @@ export default function BlockEditor() {
     <div className='block-editor'>
       <div className='container container-directory-column'>
         <Button onClick={() => {
-          setCreateBlockModalOpen(true)
+          setCreateBlockModalOpen(true);
         }} text='Создать блок' type={ButtonType.Primary} />
         <div className='container container-directory-view'>
           {
@@ -67,8 +75,9 @@ export default function BlockEditor() {
                 directory={blocks_dir}
                 viewType='json'
                 selectedFile={modContext?.selectedFile ? modContext.selectedFile : null}
-                onSelect={file => modContext?.setSelectedFile(file)}
-                onRenameClick={file => {}}
+                onSelect={selectFile}
+                onRenameClick={file => {
+                }}
               /> : 'Ошибка загрузки'
           }
         </div>
@@ -79,7 +88,7 @@ export default function BlockEditor() {
           modContext?.selectedFile == null ?
             <BlockDontSelected /> :
             <BlockParameters
-              key={lastUpdated}
+              // key={lastUpdated}
               blockFile={modContext.selectedFile}
               onEdit={async (block) => updateBlock(block)}
             />
@@ -88,9 +97,9 @@ export default function BlockEditor() {
       <CreateFileModal
         isOpen={isCreateBlockModalOpen}
         onClose={() => setCreateBlockModalOpen(false)}
-        title={"Создать блок"}
+        title={'Создать блок'}
         onSubmit={handleCreateBlockModalSubmit}
-        defaultName={""}
+        defaultName={''}
       />
     </div>
   );

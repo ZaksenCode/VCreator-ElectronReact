@@ -19,7 +19,14 @@ function NumberInt(props: ValueBoxProps) {
                     <button className='number-button number-minus' onClick={() => props.onChange(props.value - 1)}>
                         -
                     </button>
-                    <input type='text' className='number-field' defaultValue={props.value} placeholder='0' readOnly={true}/>
+                    <input
+                      type='text'
+                      className='number-field'
+                      defaultValue={props.value}
+                      value={props.value}
+                      placeholder='0'
+                      readOnly={true}
+                    />
                     <button className='number-button number-plus' onClick={() => props.onChange(props.value + 1)}>
                         +
                     </button>

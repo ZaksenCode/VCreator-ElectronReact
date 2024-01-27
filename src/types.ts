@@ -40,11 +40,11 @@ export interface ModelPrimitives {
 export interface Block {
   texture: string | null,
   "texture-faces": string[] | null
-  model: BlockModelType,
+  model: BlockModelType | null,
   "model-primitives": ModelPrimitives | null
   hitbox: number[] | null,
   rotation: BlockRotation | null,
-  "draw-group": number, // Группа отрисовки
+  "draw-group": number | null, // Группа отрисовки
   "picking-item": string | null, // Выбираемый предметы
   "light-passing": boolean | null, // Светопроводимость
   "sky-light-passing": boolean | null // Солнечная светопроводимость

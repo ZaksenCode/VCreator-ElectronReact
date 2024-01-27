@@ -23,10 +23,8 @@ export default function BlockParameters(
 
   // По факту выбора блока - читаем контент файла и парсим в блок
   useEffect(() => {
-    modContext?.loadFileContent(blockFile.path).then(content => {
-      content && setBlock(parseJson<Block>(content));
-    });
-  }, [blockFile]);
+    modContext?.contentFile && setBlock(parseJson<Block>( modContext?.contentFile));
+  }, [modContext?.contentFile]);
 
   // При изменении параметра блока, колбекаем измененный блок
   const updateBlock = (block: Block) => {
