@@ -1,6 +1,7 @@
 import './DirectoryView.scss';
 import { Directory, FileMetadata } from '../../../types';
-
+import renameIcon from '../../../../assets/icons/rename-icon.png'
+import icon from '../../../../assets/icon.png';
 type DirectoryViewType =
   'json' |
   'lua' |
@@ -11,6 +12,7 @@ interface DirectoryViewProps {
   selectedFile: FileMetadata | null
   viewType: DirectoryViewType,
   onSelect(file: FileMetadata): void;
+  onRenameClick(file: FileMetadata): void;
 }
 
 /**
@@ -61,7 +63,9 @@ export default function DirectoryView(
           onClick={() => handleItemClick(child)}
         >
           {getDisplayName(child)}
+          {/*<img className="rename-icon" src={renameIcon}  alt=""/>*/}
         </div>
+
       ))}
     </div>
   );

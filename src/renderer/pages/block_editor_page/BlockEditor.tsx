@@ -6,10 +6,13 @@ import Button, { ButtonType } from '../../components/button/Button';
 import { ModContext } from '../../contexts/ModContext';
 import { Block, Directory } from '../../../types';
 import { findFileByPath } from '../../utils';
+import CreateFileModal from '../../components/modal/create_file_modal/CreateFileModal';
 
 export default function BlockEditor() {
   const modContext = useContext(ModContext);
   const [lastUpdated, setLastUpdated] = useState(Date.now());
+
+  const [isCreateBlockModalOpen, setCreateBlockModalOpen] = useState(false);
 
   const modStructure = modContext?.modStructure;
   const blocks_dir: Directory | undefined = modStructure?.find((dir) =>
@@ -32,10 +35,31 @@ export default function BlockEditor() {
     }
   };
 
+  const handleCreateBlockModalSubmit = async (newName: string) => {
+    const filePath = `${blocks_dir?.path}/${newName}.json`
+    const newBlock: Block = {
+      texture: "",
+      'light-passing': false,
+      'draw-group': 0
+    }
+    const jsonContent = JSON.stringify(newBlock, null, 2);
+    const resultAddFile = await modContext?.addNewFile(filePath, jsonContent)
+    if (!resultAddFile || !modContext?.modPath) {
+      // TODO показываем ошибку добавления блока
+      return
+    }
+
+    const structure =
+      await window.electron.ipcRenderer.invokeReadModStructure(modContext.modPath);
+    modContext.setModStructure(structure);
+  };
+
+
   return (
     <div className='block-editor'>
       <div className='container container-directory-column'>
         <Button onClick={() => {
+          setCreateBlockModalOpen(true)
         }} text='Создать блок' type={ButtonType.Primary} />
         <div className='container container-directory-view'>
           {
@@ -44,7 +68,8 @@ export default function BlockEditor() {
                 directory={blocks_dir}
                 viewType='json'
                 selectedFile={modContext?.selectedFile ? modContext.selectedFile : null}
-                onSelect={(file) => modContext?.setSelectedFile(file)}
+                onSelect={file => modContext?.setSelectedFile(file)}
+                onRenameClick={file => {}}
               /> : 'Ошибка загрузки'
           }
         </div>
@@ -61,6 +86,13 @@ export default function BlockEditor() {
             />
         }
       </div>
+      <CreateFileModal
+        isOpen={isCreateBlockModalOpen}
+        onClose={() => setCreateBlockModalOpen(false)}
+        title={"Создать блок"}
+        onSubmit={handleCreateBlockModalSubmit}
+        defaultName={""}
+      />
     </div>
   );
 }

@@ -19,7 +19,7 @@ interface ModContextType {
   setSelectedFile: Dispatch<SetStateAction<FileMetadata | null>>;
   // Other
   loadFileContent: (filePath: string) => Promise<string | null>;
-  // saveFileContent: (filePath: string, content: string) => Promise<boolean>;
+  addNewFile: (filePath: string, content: string) => Promise<boolean>;
 }
 
 export const ModContext = createContext<ModContextType | null>(null);
@@ -38,9 +38,9 @@ export function ModProvider({ children }: ModProviderProps) {
     return window.electron.ipcRenderer.invokeLoadFileContent(filePath);
   };
 
-  // const saveFileContent = (filePath: string, fileContent: string): Promise<boolean> => {
-  //
-  // }
+  const addNewFile = (filePath: string, fileContent: string): Promise<boolean> => {
+    return window.electron.ipcRenderer.invokeSaveFileContent(filePath, fileContent);
+  }
 
   const contextValue = useMemo(
     () => ({
@@ -53,9 +53,10 @@ export function ModProvider({ children }: ModProviderProps) {
       selectedFile,
       setSelectedFile,
       // Other
-      loadFileContent
+      loadFileContent,
+      addNewFile
     }),
-    [modStructure, setModStructure, modPath, setModPath, modName, setModName, selectedFile, setSelectedFile, loadFileContent]
+    [modStructure, setModStructure, modPath, setModPath, modName, setModName, selectedFile, setSelectedFile, loadFileContent, addNewFile]
   );
 
   return (
