@@ -5,7 +5,6 @@ import BlockParameters from './block_parameters/BlockParameters';
 import Button, { ButtonType } from '../../components/button/Button';
 import { ModContext } from '../../contexts/ModContext';
 import { Block, Directory } from '../../../types';
-import { findFileByPath } from '../../utils';
 import CreateFileModal from '../../components/modal/create_file_modal/CreateFileModal';
 
 export default function BlockEditor() {
