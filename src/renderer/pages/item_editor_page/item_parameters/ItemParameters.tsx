@@ -1,11 +1,11 @@
 import './ItemParameters.scss';
 import CheckBox from '../../../components/value/CheckBox';
-import { Item, File } from '../../../../types';
+import { Item, FileMetadata } from '../../../../types';
 import { parseJson } from '../../../utils';
 import { useEffect, useState } from 'react';
 
 interface ItemParametersProps {
-  itemFile: File;
+  itemFile: FileMetadata;
 
   onEdit(block: Item): void;
 }

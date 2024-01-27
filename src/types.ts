@@ -6,10 +6,54 @@ export interface ModPackage {
   description: string | null
 }
 
+
+export type BlockModelType =
+  'aabb' |
+  'X' |
+  'custom' |
+  'none'
+
+export type BlockRotation =
+  'none' |
+  'pipe' |
+  'pane'
+
+export type AABBPrimitive  = [
+  number, // offsetX
+  number, // offsetY
+  number, // offsetZ
+  number, // sizeX
+  number, // sizeY
+  number, // sizeZ
+  string, // textureName for right face
+  string, // textureName for left face
+  string, // textureName for top face
+  string, // textureName for bottom face
+  string, // textureName for front face
+  string  // textureName for back face
+];
+
+export interface ModelPrimitives {
+  aabbs: AABBPrimitive[]
+}
+
 export interface Block {
-  "texture": string,
-  "draw-group": number,
-  "light-passing": boolean
+  texture: string | null,
+  "texture-faces": string[] | null
+  model: BlockModelType,
+  "model-primitives": ModelPrimitives | null
+  hitbox: number[] | null,
+  rotation: BlockRotation | null,
+  "draw-group": number, // Группа отрисовки
+  "picking-item": string | null, // Выбираемый предметы
+  "light-passing": boolean | null, // Светопроводимость
+  "sky-light-passing": boolean | null // Солнечная светопроводимость
+  obstacle: boolean | null  // Препятствие
+  grounded: boolean | null // Приземленность
+  selectable: boolean | null // Выделяемость
+  replaceable: boolean | null // Заменяемость
+  breakable: boolean | null // Разрушаемость
+  hidden: boolean | null // Скрытый блок
 }
 
 export interface Item {

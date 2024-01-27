@@ -189,3 +189,8 @@ ipcMain.handle('load-file-content', async (event, {path}) => {
 })
 
 
+ipcMain.handle('load-texture', async (event,  {path}) => {
+  const data = fs.readFileSync(path);
+  return `data:image/png;base64,${data.toString('base64')}`;
+});
+

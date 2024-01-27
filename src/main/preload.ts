@@ -43,6 +43,11 @@ const electronHandler = {
       path: string
     ): Promise<string | null> => {
       return ipcRenderer.invoke('load-file-content', {path});
+    },
+    loadTexture: async (
+      path: string
+    ): Promise<any> => {
+      return ipcRenderer.invoke('load-texture', {path})
     }
   }
 };
