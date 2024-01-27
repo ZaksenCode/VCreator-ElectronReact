@@ -12,18 +12,17 @@ export interface Item {
   "stack-size": number
 }
 
-export interface File {
+export interface FileMetadata {
   name: string;
   type: 'file';
-  content: string;
   path: string;
 }
 
 export interface Directory {
   name: string;
   type: 'directory';
-  children: (File | Directory)[];
+  children: (FileMetadata | Directory)[];
   path: string;
 }
 
-export type ModStructure = (File | Directory)[];
+export type ModStructure = (FileMetadata | Directory)[];

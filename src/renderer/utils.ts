@@ -1,4 +1,4 @@
-import { ModStructure, File } from '../types';
+import { ModStructure, FileMetadata } from '../types';
 
 export function parseJson<T>(jsonString: string): T | null {
   try {
@@ -10,8 +10,8 @@ export function parseJson<T>(jsonString: string): T | null {
 }
 
 
-export function findFileByPath(modStructure: ModStructure, path: string): File | null {
-  function search(structure: ModStructure): File | null {
+export function findFileByPath(modStructure: ModStructure, path: string): FileMetadata | null {
+  function search(structure: ModStructure): FileMetadata | null {
     for (const item of structure) {
       if (item.type === 'file' && item.path === path) {
         return item;

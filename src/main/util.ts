@@ -2,7 +2,7 @@
 import { URL } from 'url';
 import path from 'path';
 import fs from 'fs';
-import { Directory, ModStructure, File} from '../types';
+import { Directory, ModStructure, FileMetadata} from '../types';
 
 export function resolveHtmlPath(htmlFileName: string) {
   if (process.env.NODE_ENV === 'development') {
@@ -31,8 +31,11 @@ export function readModStructure(currentPath: string): ModStructure {
     return {
       name: dirent.name,
       type: 'file',
-      content: fs.readFileSync(fullPath, 'utf8'),
       path: fullPath
-    } as File;
+    } as FileMetadata;
   });
+}
+
+export function readFile(filePath: string): string | null {
+  return fs.readFileSync(filePath, 'utf8')
 }

@@ -1,22 +1,48 @@
 import './DirectoryView.scss';
-import { Directory, File } from '../../../types';
-import { useState } from 'react';
+import { Directory, FileMetadata } from '../../../types';
+
+type DirectoryViewType =
+  'json' |
+  'lua' |
+  'all'
 
 interface DirectoryViewProps {
   directory: Directory;
-  selectedFile: File | null
-  onSelect(file: File): void;
+  selectedFile: FileMetadata | null
+  viewType: DirectoryViewType,
+  onSelect(file: FileMetadata): void;
 }
 
 /**
- * Компонент для отображения файлов и папок открыйто директории
- * @constructor
+ * Компонент для отображения файлов и папок открытой директории
  */
 export default function DirectoryView(
-  { directory, onSelect, selectedFile}: DirectoryViewProps
+  { directory, onSelect, selectedFile, viewType}: DirectoryViewProps
 ) {
+  // Фильтр для отображения файлов / папок в списке по типу viewType
+  const isItemVisible = (item: Directory | FileMetadata) => {
+    if (viewType === 'all') {
+      return true;
+    }
 
-  const handleItemClick = (item: Directory | File) => {
+    if (item.type === 'directory') {
+      return true;
+    }
+
+    const fileExtension = item.name.split('.').pop();
+    return viewType === fileExtension;
+  };
+
+  // Отображение имени файла без расширения. Для типа all показываем
+  const getDisplayName = (item: Directory | FileMetadata) => {
+    if (item.type === 'file' && viewType !== 'all') {
+      return item.name.replace(/\.[^/.]+$/, ''); // Удаление расширения файла
+    }
+    return item.name;
+  };
+
+  // Обработка нажатий на файл / папку, колбекаем ток при типе - файл
+  const handleItemClick = (item: Directory | FileMetadata) => {
     if (item.type == 'file') {
       onSelect(item)
     }
@@ -24,7 +50,9 @@ export default function DirectoryView(
 
   return (
     <div className='directory-view'>
-      {directory.children.map((child) => (
+      {directory.children
+        .filter(isItemVisible)
+        .map((child) => (
         <div
           role='button'
           tabIndex={0}
@@ -32,7 +60,7 @@ export default function DirectoryView(
           className={`directory-item ${child.type} ${child === selectedFile ? 'selected' : ''}`}
           onClick={() => handleItemClick(child)}
         >
-          {child.name}
+          {getDisplayName(child)}
         </div>
       ))}
     </div>

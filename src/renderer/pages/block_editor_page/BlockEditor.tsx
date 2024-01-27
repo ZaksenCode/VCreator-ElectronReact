@@ -4,41 +4,31 @@ import DirectoryView from '../../components/directory_view/DirectoryView';
 import BlockParameters from './block_parameters/BlockParameters';
 import Button, { ButtonType } from '../../components/button/Button';
 import { ModContext } from '../../contexts/ModContext';
-import { Block, Directory, File } from '../../../types';
+import { Block, Directory } from '../../../types';
 import { findFileByPath } from '../../utils';
 
 export default function BlockEditor() {
   const modContext = useContext(ModContext);
+  const [lastUpdated, setLastUpdated] = useState(Date.now());
+
   const modStructure = modContext?.modStructure;
   const blocks_dir: Directory | undefined = modStructure?.find((dir) =>
     dir.type == 'directory' && dir.name == 'blocks'
   ) as Directory | undefined;
 
-  const updateBlock = (updatedBlock: Block) => {
+  const updateBlock = async (updatedBlock: Block) => {
     if (modContext?.selectedFile != null && modContext != null) {
-      window.electron.ipcRenderer.invokeSaveFileChanges(modContext?.selectedFile.path, updatedBlock)
-        .then(result => {
-          if (result && modContext.modPath != null) {
-            // TODO Показать индикатор загрузки или сообщение о начале обновления структуры мода
-            window.electron.ipcRenderer.invokeReadModStructure(modContext.modPath)
-              .then(structure => {
-                if (structure == null || modContext.selectedFile == null) return
-                const updatedSelectedFile = findFileByPath(structure, modContext.selectedFile.path);
-                modContext.setModStructure(structure);
-                if (updatedSelectedFile) {
-                  modContext.setSelectedFile(updatedSelectedFile);
-                }
+      const filePath = modContext.selectedFile.path;
+      // Получем обновленный контент блока и конвертим в строку
+      const jsonContent = JSON.stringify(updatedBlock, null, 2);
+      const isSaved = await window.electron.ipcRenderer.invokeSaveFileContent(filePath, jsonContent);
+      if (!isSaved) {
+        // TODO Показывает алерт с ошибкой записи
+        return;
+      }
 
-                // TODO  Скрыть индикатор загрузки или показать сообщение об успешном обновлении
-              })
-              .catch(error => {
-                // TODO  Обработка ошибок при чтении структуры мода
-              });
-          }
-        })
-        .catch(error => {
-          // TODO Обработка ошибок при сохранении файла
-        });
+      // Если успешно сохранили файл, то нужно обновить BlockParameters для повторной загрузки контента блока
+      setLastUpdated(Date.now());
     }
   };
 
@@ -52,6 +42,7 @@ export default function BlockEditor() {
             blocks_dir != undefined ?
               <DirectoryView
                 directory={blocks_dir}
+                viewType='json'
                 selectedFile={modContext?.selectedFile ? modContext.selectedFile : null}
                 onSelect={(file) => modContext?.setSelectedFile(file)}
               /> : 'Ошибка загрузки'
@@ -63,9 +54,11 @@ export default function BlockEditor() {
         {
           modContext?.selectedFile == null ?
             <BlockDontSelected /> :
-            <BlockParameters blockFile={modContext.selectedFile} onEdit={(block) => {
-              updateBlock(block);
-            }} />
+            <BlockParameters
+              key={lastUpdated}
+              blockFile={modContext.selectedFile}
+              onEdit={async (block) => updateBlock(block)}
+            />
         }
       </div>
     </div>

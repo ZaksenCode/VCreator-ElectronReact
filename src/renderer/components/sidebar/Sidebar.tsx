@@ -31,18 +31,21 @@ function Sidebar() {
             <SidebarButton
               buttonImg={block}
               onClick={() => {
+                modContext?.setSelectedFile(null)
                 navigate('/block-edit');
               }}
             />
             <SidebarButton
               buttonImg={script}
               onClick={() => {
+                modContext?.setSelectedFile(null)
                 navigate('/test3');
               }}
             />
             <SidebarButton
               buttonImg={item}
               onClick={() => {
+                modContext?.setSelectedFile(null)
                 redirect('/item-edit');
               }}
             />

@@ -13,7 +13,7 @@ import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-import { resolveHtmlPath, readModStructure } from './util';
+import { resolveHtmlPath, readModStructure, readFile } from './util';
 import fs from 'fs';
 
 class AppUpdater {
@@ -139,7 +139,10 @@ app
   })
   .catch(console.log);
 
-// Открытие диаога выбора директории
+/**
+ * Вызов диалога выбора файла/папки
+ * @return путь
+ */
 ipcMain.handle('open-directory-dialog', async () => {
   // Открытие диалога выбора папки
   const result = await dialog.showOpenDialog({
@@ -148,7 +151,9 @@ ipcMain.handle('open-directory-dialog', async () => {
   return result.filePaths; // Возвращает массив выбранных путей
 });
 
-// Чтение структуры мода
+/**
+ * Чтение структуры мода
+ */
 ipcMain.handle('read-mod-structure', async (event, modPath: string) => {
   try {
     return readModStructure(modPath);
@@ -158,17 +163,29 @@ ipcMain.handle('read-mod-structure', async (event, modPath: string) => {
   }
 });
 
-ipcMain.handle('save-json-changes', async (event, { path, content }) => {
+/**
+ * Сохроанение файла по пути
+ */
+ipcMain.handle('save-file-content', async (event, { path, content }) => {
   try {
-    console.log(path)
-    console.log(content)
-    const jsonContent = JSON.stringify(content, null, 2);
-    fs.writeFileSync(path, jsonContent, 'utf-8');
+    fs.writeFileSync(path, content, 'utf-8');
     return true
   } catch (error) {
-    console.error('Ошибка при сохранении блока:', error);
+    console.error('Ошибка при сохранении файла:', error);
     return false
   }
 });
+
+/**
+ * Загрузка файла по пути
+ */
+ipcMain.handle('load-file-content', async (event, {path}) => {
+  try {
+    return readFile(path)
+  } catch (error) {
+    console.error('Ошибка при чтении файла:', error);
+    return null
+  }
+})
 
 

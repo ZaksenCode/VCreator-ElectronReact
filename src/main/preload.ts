@@ -6,8 +6,7 @@ import { ModStructure } from '../types';
 export type Channels =
   | 'ipc-example'
   | 'open-directory-dialog'
-  | 'read-mod-structure'
-  | 'save-file-changes';
+  | 'read-mod-structure';
 
 const electronHandler = {
   ipcRenderer: {
@@ -34,11 +33,16 @@ const electronHandler = {
     ): Promise<ModStructure | null> => {
       return ipcRenderer.invoke('read-mod-structure', modPath);
     },
-    invokeSaveFileChanges: async (
+    invokeSaveFileContent: async (
       path: string,
-      content: any
+      content: string
     ): Promise<boolean> => {
-      return ipcRenderer.invoke('save-json-changes', {path, content});
+      return ipcRenderer.invoke('save-file-content', {path, content});
+    },
+    invokeLoadFileContent: async (
+      path: string
+    ): Promise<string | null> => {
+      return ipcRenderer.invoke('load-file-content', {path});
     }
   }
 };
