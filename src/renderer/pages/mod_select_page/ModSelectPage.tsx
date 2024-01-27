@@ -1,16 +1,28 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { ModContext } from '../../contexts/ModContext';
 import Button, { ButtonType } from '../../components/button/Button';
 import ModInfo from './mod_info/ModInfo';
-import "./ModSelectPage.scss"
+import './ModSelectPage.scss';
+import { parseJson } from '../../utils';
+import { ModPackage } from '../../../types';
 
 export default function ModSelectPage() {
-  const { setModStructure, setModPath, setModName } = useContext(ModContext)!;
+  const modContext = useContext(ModContext)!;
+  const [modInfo, setModInfo] = useState<ModPackage | null>(null);
+  useEffect(() => {
+    const structure = modContext.modStructure;
+    structure?.forEach(item => {
+      if (item.type != 'file' || item.name != 'package.json') return;
+      modContext?.loadFileContent(item.path).then(fileContent =>
+        fileContent && setModInfo(parseJson<ModPackage>(fileContent))
+      );
+    });
+  }, [modContext.modStructure]);
 
   const readModStructure = async (dirPath: string) => {
     const structure =
       await window.electron.ipcRenderer.invokeReadModStructure(dirPath);
-    setModStructure(structure);
+    modContext?.setModStructure(structure);
   };
 
   const openFolderDialog = async () => {
@@ -19,9 +31,9 @@ export default function ModSelectPage() {
       const modPath = paths[0];
       try {
         await readModStructure(modPath);
-        setModPath(modPath);
+        modContext?.setModPath(modPath);
         const modName = modPath.split('/').pop();
-        if (modName) setModName(modName);
+        if (modName) modContext?.setModName(modName);
       } catch (e) {
         console.error('Error parsing mod');
       }
@@ -30,14 +42,17 @@ export default function ModSelectPage() {
 
   return (
     <div className='mod-select-page'>
-      <div className="container">
-        <ModInfo
-          version='0'
-          author='none'
-          description='none'
-          tags='none'
-        />
-      </div>
+      {
+        modInfo &&
+        <div className='container'>
+          <ModInfo
+            version={modInfo.version || "Отсутствует" }
+            author={modInfo.creator || "Отсутствует"}
+            description={modInfo.description || "Отсутствует"}
+            tags='none'
+          />
+        </div>
+      }
       <div className='mod-actions'>
         <div className='button-group'>
           <Button
@@ -73,7 +88,7 @@ export default function ModSelectPage() {
           Данная вкладка в разработке и не выполняет никакого функционала!
         </div>
       </div>
-      <div className='spacer'/>
+      <div className='spacer' />
       <Button
         text='Загрузить контент пак'
         onClick={openFolderDialog}

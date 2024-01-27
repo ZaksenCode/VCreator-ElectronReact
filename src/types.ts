@@ -1,3 +1,11 @@
+export interface ModPackage {
+  id: string | null,
+  title: string | null,
+  creator: string | null,
+  version: string | null,
+  description: string | null
+}
+
 export interface Block {
   "texture": string,
   "draw-group": number,
