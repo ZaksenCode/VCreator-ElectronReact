@@ -16,7 +16,7 @@ export default function ItemParameters(
   const [getItem, setItem] = useState<Item | null>(null);
 
   useEffect(() => {
-    setItem(parseJson<Item>(itemFile.content)); // Обновление состояния при изменении itemFile
+    // setItem(parseJson<Item>(itemFile.content)); // Обновление состояния при изменении itemFile
   }, [itemFile]);
   const updateItem = (item: Item) => {
     setItem(item);

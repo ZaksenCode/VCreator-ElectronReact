@@ -43,11 +43,22 @@ export default function BlockEditor() {
   const handleCreateBlockModalSubmit = async (newName: string) => {
     const filePath = `${blocks_dir?.path}/${newName}.json`;
     const newBlock: Block = {
-      texture: '',
-      'light-passing': false,
-      'draw-group': 0,
-      hitbox: [0, 0, 0, 1, 1, 1],
-      rotation: 'none',
+      "draw-group": null,
+      "light-passing": null,
+      "model-primitives": null,
+      "picking-item": null,
+      "sky-light-passing": null,
+      "texture-faces": null,
+      breakable: null,
+      grounded: null,
+      hidden: null,
+      hitbox: null,
+      model: null,
+      obstacle: null,
+      replaceable: null,
+      rotation: null,
+      selectable: null,
+      texture: null
     };
     const jsonContent = JSON.stringify(newBlock, null, 2);
     const resultAddFile = await modContext?.addNewFile(filePath, jsonContent);

@@ -31,6 +31,7 @@ export default function ItemEditor() {
           {
             items_dir != undefined ?
               <DirectoryView
+                onRenameClick={()=>{}}
                 directory={items_dir}
                 selectedFile={modContext?.selectedFile ? modContext.selectedFile : null}
                 onSelect={(file) => modContext?.setSelectedFile(file)}
