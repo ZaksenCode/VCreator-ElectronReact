@@ -4,7 +4,7 @@ import DirectoryView from '../../components/directory_view/DirectoryView';
 import ItemParameters from './item_parameters/ItemParameters';
 import Button, { ButtonType } from '../../components/button/Button';
 import { ModContext } from '../../contexts/ModContext';
-import { Item, Directory, File } from '../../../types';
+import { Item, Directory, FileMetadata } from '../../../types';
 import { findFileByPath } from '../../utils';
 import BlockParameters from '../block_editor_page/block_parameters/BlockParameters';
 
@@ -34,7 +34,7 @@ export default function ItemEditor() {
                 directory={items_dir}
                 selectedFile={modContext?.selectedFile ? modContext.selectedFile : null}
                 onSelect={(file) => modContext?.setSelectedFile(file)}
-              /> : 'Ошибка загрузки'
+                viewType='json'/> : 'Ошибка загрузки'
           }
         </div>
       </div>
