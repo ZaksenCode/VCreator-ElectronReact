@@ -46,7 +46,7 @@ function Sidebar() {
               buttonImg={item}
               onClick={() => {
                 modContext?.setSelectedFile(null)
-                redirect('/item-edit');
+                navigate('/item-edit');
               }}
             />
           </>
