@@ -1,10 +1,11 @@
 import './BlockPreview.scss';
+import 'jest-canvas-mock';
 import * as THREE from 'three';
 import { Block } from '../../../../../types';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Canvas, useFrame, useLoader} from '@react-three/fiber';
-import { OrbitControls, Grid } from '@react-three/drei';
-import { GridHelper, TextureLoader } from 'three';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+import { GridHelper } from 'three';
 
 /**
  * Загрузка текстуры
@@ -212,8 +213,6 @@ function SimpleBlockModel({ block, modPath }: SimpleBlockModelProps) {
   }, [gridHelperPositionY]);
 
   if (!textureData) return null;
-
-
 
 
   const geometry = new THREE.BoxGeometry(hitbox[3], hitbox[4], hitbox[5]);

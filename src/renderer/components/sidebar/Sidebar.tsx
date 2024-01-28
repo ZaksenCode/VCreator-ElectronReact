@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import SidebarButton from '../button/SidebarButton';
 import './Sidebar.scss';
 import icon from '../../../../assets/icon.png';

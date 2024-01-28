@@ -1,5 +1,5 @@
 import './DirectoryView.scss';
-import { Directory, FileMetadata } from '../../../types';
+import { Directory, FileMetadata, TextureMetadata } from '../../../types';
 type DirectoryViewType =
   'json' |
   'lua' |
@@ -20,7 +20,7 @@ export default function DirectoryView(
   { directory, onSelect, selectedFile, viewType}: DirectoryViewProps
 ) {
   // Фильтр для отображения файлов / папок в списке по типу viewType
-  const isItemVisible = (item: Directory | FileMetadata) => {
+  const isItemVisible = (item: Directory | FileMetadata | TextureMetadata) => {
     if (viewType === 'all') {
       return true;
     }
@@ -34,7 +34,7 @@ export default function DirectoryView(
   };
 
   // Отображение имени файла без расширения. Для типа all показываем
-  const getDisplayName = (item: Directory | FileMetadata) => {
+  const getDisplayName = (item: Directory | FileMetadata| TextureMetadata) => {
     if (item.type === 'file' && viewType !== 'all') {
       return item.name.replace(/\.[^/.]+$/, ''); // Удаление расширения файла
     }
@@ -42,7 +42,7 @@ export default function DirectoryView(
   };
 
   // Обработка нажатий на файл / папку, колбекаем ток при типе - файл
-  const handleItemClick = (item: Directory | FileMetadata) => {
+  const handleItemClick = (item: Directory | FileMetadata| TextureMetadata) => {
     if (item.type == 'file') {
       onSelect(item)
     }
