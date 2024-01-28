@@ -2,7 +2,7 @@ import './BlockParameters.scss';
 import CheckBox from '../../../components/value/CheckBox';
 import ComboBox from '../../../components/value/ComboBox';
 import NumberInt from '../../../components/value/NumberInt';
-import { Block, FileMetadata } from '../../../../types';
+import { Block, FileMetadata, ModStructure } from '../../../../types';
 import { parseJson } from '../../../utils';
 import React, { useContext, useEffect, useState } from 'react';
 import { ModContext } from '../../../contexts/ModContext';
@@ -34,7 +34,8 @@ export default function BlockParameters(
 
   return (
     <div className='block-parameters'>
-      {getBlock != null ? <Parameters
+      {getBlock != null && modContext?.modStructure ? <Parameters
+        modStructure={modContext.modStructure}
         block={getBlock}
         modPath={modContext?.modPath || ''}
         onChange={(newBlock) => updateBlock(newBlock)}
@@ -43,16 +44,18 @@ export default function BlockParameters(
 }
 
 interface ParametersProps {
+  modStructure: ModStructure;
   block: Block;
   modPath: string;
 
   onChange(blockNewState: Block): void;
 }
 
-function Parameters({ block, onChange, modPath }: ParametersProps) {
+function Parameters({modStructure,  block, onChange, modPath }: ParametersProps) {
   return (
     <>
       <ModelEditor
+        modStructure={modStructure}
           block={block}
           modPath={modPath}
           onSave={newBlock => {

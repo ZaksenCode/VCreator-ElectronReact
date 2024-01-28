@@ -35,18 +35,25 @@ function Sidebar() {
                 navigate('/block-edit');
               }}
             />
-            <SidebarButton
-              buttonImg={script}
-              onClick={() => {
-                modContext?.setSelectedFile(null)
-                navigate('/test3');
-              }}
-            />
+            {/*<SidebarButton*/}
+            {/*  buttonImg={script}*/}
+            {/*  onClick={() => {*/}
+            {/*    modContext?.setSelectedFile(null)*/}
+            {/*    navigate('/test3');*/}
+            {/*  }}*/}
+            {/*/>*/}
+            {/*<SidebarButton*/}
+            {/*  buttonImg={item}*/}
+            {/*  onClick={() => {*/}
+            {/*    modContext?.setSelectedFile(null)*/}
+            {/*    navigate('/item-edit');*/}
+            {/*  }}*/}
+            {/*/>*/}
             <SidebarButton
               buttonImg={item}
               onClick={() => {
                 modContext?.setSelectedFile(null)
-                navigate('/item-edit');
+                navigate('/textures');
               }}
             />
           </>

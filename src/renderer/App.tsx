@@ -10,6 +10,7 @@ import { ModContext, ModProvider } from './contexts/ModContext';
 import BlockEditor from './pages/block_editor_page/BlockEditor';
 import ItemEditor from './pages/item_editor_page/ItemEditor';
 import { ReactNotifications } from 'react-notifications-component'
+import TexturePage from './pages/textures_pages/TexturePage';
 
 export default function App() {
   const modContext = useContext(ModContext);
@@ -34,8 +35,9 @@ export default function App() {
             <Routes>
               <Route path='/' element={<ModSelectPage />} />
               <Route path='/block-edit' element={<BlockEditor />} />
-              <Route path='/test3' element={<BlockEditor />} />
-              <Route path='/item-edit' element={<ItemEditor />} />
+              {/*<Route path='/test3' element={<BlockEditor />} />*/}
+              {/*<Route path='/item-edit' element={<ItemEditor />} />*/}
+              <Route path='/textures' element={<TexturePage />} />
             </Routes>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { ModStructure, FileMetadata } from '../types';
+import { ModStructure, FileMetadata, TextureMetadata, Directory } from '../types';
 
 export function parseJson<T>(jsonString: string): T | null {
   try {
@@ -24,4 +24,23 @@ export function findFileByPath(modStructure: ModStructure, path: string): FileMe
   }
 
   return search(modStructure);
+}
+
+
+export function getBlockTextures(modStructure: ModStructure): TextureMetadata[] {
+  const result: TextureMetadata[] = [];
+  const textures_dir: Directory | undefined = modStructure.find((dir) =>
+    dir.type === 'directory' && dir.name === 'textures'
+  ) as Directory | undefined;
+
+  const textures_blocks_dir: Directory | undefined = textures_dir?.children?.find((dir) =>
+    dir.type === 'directory' && dir.name === 'blocks'
+  ) as Directory | undefined;
+
+  textures_blocks_dir?.children.forEach((file) => {
+    if (file.type === "texture") {
+      result.push(file as TextureMetadata);
+    }
+  });
+  return result;
 }

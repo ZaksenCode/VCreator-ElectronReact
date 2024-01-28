@@ -1,8 +1,10 @@
 import './ModelEditor.scss';
-import { useEffect, useState } from 'react';
-import { AABBPrimitive, Block, ModelPrimitives } from '../../../../../types';
+import { useEffect, useMemo, useState } from 'react';
+import { AABBPrimitive, Block, ModelPrimitives, ModStructure, TextureMetadata } from '../../../../../types';
 import BlockPreview from '../block_preview/BlockPreview';
 import { Store } from 'react-notifications-component';
+import { getBlockTextures } from '../../../../utils';
+import ChangeTextureModal from '../change_texture_modal/ChangeTextureModal';
 
 
 const showWarning = (
@@ -29,13 +31,18 @@ type ModelType =
   'custom-model'
 
 interface CustomModelEditorProps {
+  textures: TextureMetadata[]
   primitives: ModelPrimitives,
 
   updatePrimitives(newPrimitives: ModelPrimitives): void
 }
 
-function CustomModelEditor({ primitives, updatePrimitives }: CustomModelEditorProps) {
+function CustomModelEditor({ textures, primitives, updatePrimitives }: CustomModelEditorProps) {
   const [localAabbs, setLocalAabbs] = useState(primitives.aabbs);
+  const [editingTextureIndex, setEditingTextureIndex] = useState(0)
+  const [editingPrimitivesIndex, setEditingPrimitivesIndex] = useState(0)
+
+  const [textureDialogIsShowing, setTextureDialogIsShowing] = useState(false)
 
   useEffect(() => {
     setLocalAabbs(primitives.aabbs);
@@ -60,6 +67,31 @@ function CustomModelEditor({ primitives, updatePrimitives }: CustomModelEditorPr
     setLocalAabbs(updatedAabbs);
     updatePrimitives({ aabbs: updatedAabbs });
   };
+
+  const getTexture = (name: string): TextureMetadata | undefined => {
+    return textures.find((texture) => {
+      const textureName = texture.name.replace(/\.[^/.]+$/, '');
+      if (textureName == name) {
+        return texture;
+      }
+    });
+  };
+
+  const handleTextureClick = (primIndex: number, textureIndex: number) => {
+    setEditingTextureIndex(textureIndex)
+    setEditingPrimitivesIndex(primIndex)
+    setTextureDialogIsShowing(true)
+  };
+
+  const handleTextureDialogSelect = (file: TextureMetadata) => {
+    const updatedAabbs = [...localAabbs];
+    updatedAabbs[editingPrimitivesIndex][editingTextureIndex] = file.name.replace(/\.[^/.]+$/, '');
+    setLocalAabbs(updatedAabbs);
+    updatePrimitives({ aabbs: updatedAabbs });
+    setEditingTextureIndex(0)
+    setEditingPrimitivesIndex(0)
+    setTextureDialogIsShowing(false)
+  }
 
   return (
     <div className='custom-model-editor'>
@@ -109,26 +141,46 @@ function CustomModelEditor({ primitives, updatePrimitives }: CustomModelEditorPr
               onChange={(e) => handleInputChange(index, parseFloat(e.target.value), 5)}
             />
           </div>
+          <div className='textures'>
+            {[6, 7, 8, 9, 10, 11].map((textureIndex) => {
+              const textureName = aabb[textureIndex];
+              if (typeof textureName == 'number') return null;
+              const texture = getTexture(textureName);
+              return (
+                <div key={textureIndex}
+                     className='texture'
+                     onClick={() => handleTextureClick(index, textureIndex)}>
+                  <img
+                    src={texture?.content}
+                    alt={texture?.name}
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
       ))}
       <button className='add' onClick={() => addPrimitive()}>Добавить примитив</button>
+      <ChangeTextureModal textures={textures} onClose={()=>{setTextureDialogIsShowing(false)}} onSubmit={handleTextureDialogSelect} isOpen={textureDialogIsShowing}/>
     </div>
   );
 }
 
 interface ModelEditorProps {
+  modStructure: ModStructure;
   block: Block;
   modPath: string;
-  onSave(newBlock: Block): void
+
+  onSave(newBlock: Block): void;
 }
 
-export default function ModelEditor({ block, modPath, onSave}: ModelEditorProps) {
+export default function ModelEditor({ modStructure, block, modPath, onSave }: ModelEditorProps) {
   const [editingBlock, setEditingBlock] = useState<Block | null>(null);
   const [activeTab, setActiveTab] = useState<ModelType | null>(null);
   const [confirmationTab, setConfirmationTab] = useState<ModelType | null>(null);
   const [isNeedSave, setIsNeedSave] = useState(false);
 
-
+  // getBlockTextures
   useEffect(() => {
     setEditingBlock(block);
     if (block.texture || block['texture-faces']) {
@@ -138,8 +190,12 @@ export default function ModelEditor({ block, modPath, onSave}: ModelEditorProps)
     } else {
       setActiveTab('no-model');
     }
-    setIsNeedSave(false)
+    setIsNeedSave(false);
   }, [block]);
+
+  const textures = useMemo(() => getBlockTextures(modStructure),
+    [modStructure]
+  );
 
   if (!editingBlock || !activeTab) return null;
 
@@ -152,13 +208,13 @@ export default function ModelEditor({ block, modPath, onSave}: ModelEditorProps)
       setActiveTab('no-model');
     }
     setEditingBlock(block);
-    setIsNeedSave(false)
-  }
+    setIsNeedSave(false);
+  };
 
   const saveUpdates = () => {
-    onSave(editingBlock)
-    setIsNeedSave(false)
-  }
+    onSave(editingBlock);
+    setIsNeedSave(false);
+  };
 
   const setNoModel = () => {
     const updatedBlock: Block = {
@@ -250,13 +306,14 @@ export default function ModelEditor({ block, modPath, onSave}: ModelEditorProps)
           <div className='model-editor-panel'>
             <div className='panel-content'>
               {editingBlock['model-primitives'] &&
-                <CustomModelEditor primitives={editingBlock['model-primitives']} updatePrimitives={(newPrimitives) => {
-                  if (!isNeedSave) setIsNeedSave(true);
-                  setEditingBlock({
-                    ...editingBlock,
-                    ['model-primitives']: newPrimitives
-                  });
-                }} />}
+                <CustomModelEditor textures={textures} primitives={editingBlock['model-primitives']}
+                                   updatePrimitives={(newPrimitives) => {
+                                     if (!isNeedSave) setIsNeedSave(true);
+                                     setEditingBlock({
+                                       ...editingBlock,
+                                       ['model-primitives']: newPrimitives
+                                     });
+                                   }} />}
             </div>
           </div>
         )}

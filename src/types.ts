@@ -70,11 +70,18 @@ export interface FileMetadata {
   path: string;
 }
 
+export interface TextureMetadata {
+  name: string;
+  type: 'texture';
+  content: string;
+  path: string
+}
+
 export interface Directory {
   name: string;
   type: 'directory';
-  children: (FileMetadata | Directory)[];
+  children: (FileMetadata | Directory | TextureMetadata)[];
   path: string;
 }
 
-export type ModStructure = (FileMetadata | Directory)[];
+export type ModStructure = (FileMetadata | Directory | TextureMetadata)[];
