@@ -7,6 +7,7 @@ import { parseJson } from '../../../utils';
 import React, { useContext, useEffect, useState } from 'react';
 import { ModContext } from '../../../contexts/ModContext';
 import BlockPreview from './block_preview/BlockPreview';
+import ModelEditor from './model_editor/ModelEditor';
 
 
 interface BlockParametersProps {
@@ -51,11 +52,20 @@ interface ParametersProps {
 function Parameters({ block, onChange, modPath }: ParametersProps) {
   return (
     <>
-      <BlockPreview
-        block={block}
-        modPath={modPath}
+      <ModelEditor
+          block={block}
+          modPath={modPath}
+          onSave={newBlock => {
+            const updatedBlock: Block = {
+              ...block,
+              ['texture']: newBlock['texture'],
+              ['texture-faces']: newBlock['texture-faces'],
+              ['model']: newBlock['model'],
+              ['model-primitives']: newBlock['model-primitives'],
+            };
+            onChange(updatedBlock);
+          }}
       />
-
       <ComboBox
         valueName='Вращение:'
         valueDescription='Тег какой-то'

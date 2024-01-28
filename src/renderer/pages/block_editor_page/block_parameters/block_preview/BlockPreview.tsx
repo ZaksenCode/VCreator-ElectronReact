@@ -2,8 +2,9 @@ import './BlockPreview.scss';
 import * as THREE from 'three';
 import { Block } from '../../../../../types';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Canvas, useFrame, useLoader } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import { Canvas, useFrame, useLoader} from '@react-three/fiber';
+import { OrbitControls, Grid } from '@react-three/drei';
+import { GridHelper, TextureLoader } from 'three';
 
 /**
  * Загрузка текстуры
@@ -11,9 +12,17 @@ import { OrbitControls } from '@react-three/drei';
  * @param textureName - название текстуры
  */
 const loadTexture = async (modPath: string, textureName: string) => {
+
+  if (textureName === 'notfound') {
+
+    const size = 1; // 1 пиксель
+    const data = new Uint8Array([255, 255, 255, 100]); // Белый цвет в RGBA
+    const texture = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
+    texture.needsUpdate = true; // Обновление текстуры после изменения данных
+    return texture;
+  }
   const texturePath = `${modPath}/textures/blocks/${textureName}.png`;
   const textureData = await window.electron.ipcRenderer.loadTexture(texturePath);
-
   const texture = new THREE.TextureLoader().load(textureData);
   texture.minFilter = THREE.NearestFilter;
   texture.magFilter = THREE.NearestFilter;
@@ -34,17 +43,37 @@ const CrossModel = ({ block, modPath }: CrossModelProps) => {
     });
   }, [block]);
 
+  const arrowHelper = useMemo(() => {
+    const dir = new THREE.Vector3(0, 0, -1); // Направление стрелки вдоль оси X
+    const origin = new THREE.Vector3(0, -0.5, -0.5); // Начальная точка стрелки
+    const length = 1; // Длина стрелки
+    const color = 0xff0000; // Цвет стрелки
+
+    return new THREE.ArrowHelper(dir, origin, length, color);
+  }, []);
+
+
   if (!textureData) return null;
   return (
     <group>
       <mesh rotation={[0, 0, 0]}>
-        <planeGeometry attach="geometry" args={[1, 1]} />
-        <meshBasicMaterial attach="material" map={textureData} side={THREE.DoubleSide} transparent={true}  depthWrite={false}  />
+        <planeGeometry attach='geometry' args={[1, 1]} />
+        <meshBasicMaterial attach='material' map={textureData} side={THREE.DoubleSide} transparent={true}
+                           depthWrite={false} />
       </mesh>
       <mesh rotation={[0, Math.PI / 2, 0]}>
-        <planeGeometry attach="geometry" args={[1, 1]} />
-        <meshBasicMaterial attach="material" map={textureData} side={THREE.DoubleSide} transparent={true} depthWrite={false} />
+        <planeGeometry attach='geometry' args={[1, 1]} />
+        <meshBasicMaterial attach='material' map={textureData} side={THREE.DoubleSide} transparent={true}
+                           depthWrite={false} />
       </mesh>
+
+      <primitive
+        object={new GridHelper(9, 9)}
+        position={[0, -0.5, 0]}
+        rotation={[Math.PI, 0, 0]}
+      />
+
+      <primitive object={arrowHelper} />
     </group>
   );
 };
@@ -106,6 +135,16 @@ const CustomModel = ({ block, modPath }: CustomModelProps) => {
     };
   }), [modelPrimitives, loadedTextures]);
 
+  const arrowHelper = useMemo(() => {
+    const dir = new THREE.Vector3(0, 0, -1); // Направление стрелки вдоль оси X
+    const origin = new THREE.Vector3(0.5, 0, 0); // Начальная точка стрелки
+    const length = 1; // Длина стрелки
+    const color = 0xff0000; // Цвет стрелки
+
+    return new THREE.ArrowHelper(dir, origin, length, color);
+  }, []);
+
+
   const center = useMemo(() => {
     const box = new THREE.Box3();
     objects.forEach(obj => {
@@ -122,6 +161,12 @@ const CustomModel = ({ block, modPath }: CustomModelProps) => {
           {obj.materials}
         </mesh>
       ))}
+      <primitive
+        object={new GridHelper(9, 9)}
+        position={[0.5, 0, 0.5]}
+        rotation={[Math.PI, 0, 0]}
+      />
+      <primitive object={arrowHelper} />
     </group>
   );
 };
@@ -154,20 +199,28 @@ function SimpleBlockModel({ block, modPath }: SimpleBlockModelProps) {
 
   }, [block]);
 
-  if (!textureData) return null;
   const hitbox = block.hitbox ? block.hitbox : [0, 0, 0, 1, 1, 1];
-  const geometry = new THREE.BoxGeometry(hitbox[3], hitbox[4], hitbox[5]);
-  // useFrame((state, delta) => {
-  //   if (!meshRef.current) return
-  //   meshRef.current.rotation.x += delta;
-  //   meshRef.current.rotation.y += delta;
-  // });
+  const gridHelperPositionY = -hitbox[4] / 2; // Позиционирование GridHelper на половину высоты блока вниз
 
+  const arrowHelper = useMemo(() => {
+    const dir = new THREE.Vector3(0, 0, -1); // Направление стрелки вдоль оси X
+    const origin = new THREE.Vector3(0, gridHelperPositionY, -0.5); // Начальная точка стрелки
+    const length = 1; // Длина стрелки
+    const color = 0xff0000; // Цвет стрелки
+
+    return new THREE.ArrowHelper(dir, origin, length, color);
+  }, [gridHelperPositionY]);
+
+  if (!textureData) return null;
+
+
+
+
+  const geometry = new THREE.BoxGeometry(hitbox[3], hitbox[4], hitbox[5]);
   return (
     <mesh
       ref={meshRef}
-      geometry={geometry}
-      scale={3}>
+      geometry={geometry}>
       {textureData.length == 1 ?
         <meshStandardMaterial
           attach='material'
@@ -183,6 +236,13 @@ function SimpleBlockModel({ block, modPath }: SimpleBlockModelProps) {
           />
         )
       }
+      <primitive
+        object={new GridHelper(9, 9)}
+        position={[0, gridHelperPositionY, 0]}
+        rotation={[Math.PI, 0, 0]}
+      />
+
+      <primitive object={arrowHelper} />
     </mesh>
   );
 }
@@ -195,18 +255,18 @@ interface BlockPreviewProps {
 
 export default function BlockPreview({ block, modPath }: BlockPreviewProps) {
 
-  console.log(block)
+  console.log(block);
 
   const modelRenderer = useMemo(() => {
-      if (block.texture && block.model == 'X')
-        return <CrossModel block={block} modPath={modPath} />
-      if (block.texture || block['texture-faces'])
-        return <SimpleBlockModel block={block} modPath={modPath} />;
-      if (block.model == 'custom')
-        return <CustomModel block={block} modPath={modPath} />;
-      return null;
+    if (block.texture && block.model == 'X')
+      return <CrossModel block={block} modPath={modPath} />;
+    if (block.texture || block['texture-faces'])
+      return <SimpleBlockModel block={block} modPath={modPath} />;
+    if (block.model == 'custom')
+      return <CustomModel block={block} modPath={modPath} />;
+    return null;
 
-  }, [block.texture, block.model, block.hitbox, block['texture-faces'], block['model-primitives']])
+  }, [block.texture, block.model, block.hitbox, block['texture-faces'], block['model-primitives']]);
 
   return modelRenderer ?
     (

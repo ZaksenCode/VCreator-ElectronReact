@@ -1,9 +1,16 @@
 .block-viewer {
-  width: 300px;
-  height: 300px;
-}
+  display: flex;
+  margin: 8px;
+  flex-shrink: 1;
+  flex-grow: 1;
+  min-height: 100px;
+  min-width: 100px;
+  background-color: #2D3250;
+  border-radius: 4px;
+  canvas {
+    display: flex !important;
 
-//@keyframes spin {
-//  from { transform: rotateY(0deg); }
-//  to { transform: rotateY(360deg); }
-//}
+    width: 100% !important;
+    height: 100% !important;
+  }
+}

@@ -9,6 +9,7 @@ import ModSelectPage from './pages/mod_select_page/ModSelectPage';
 import { ModContext, ModProvider } from './contexts/ModContext';
 import BlockEditor from './pages/block_editor_page/BlockEditor';
 import ItemEditor from './pages/item_editor_page/ItemEditor';
+import { ReactNotifications } from 'react-notifications-component'
 
 export default function App() {
   const modContext = useContext(ModContext);
@@ -38,6 +39,7 @@ export default function App() {
             </Routes>
           </div>
         </div>
+        <ReactNotifications/>
       </div>
     </ModProvider>
   );

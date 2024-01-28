@@ -6,11 +6,9 @@ import Button, { ButtonType } from '../../components/button/Button';
 import { ModContext } from '../../contexts/ModContext';
 import { Block, Directory, FileMetadata } from '../../../types';
 import CreateFileModal from '../../components/modal/create_file_modal/CreateFileModal';
-import { parseJson } from '../../utils';
 
 export default function BlockEditor() {
   const modContext = useContext(ModContext);
-  const [lastUpdated, setLastUpdated] = useState(Date.now());
 
   const [isCreateBlockModalOpen, setCreateBlockModalOpen] = useState(false);
 
@@ -23,7 +21,12 @@ export default function BlockEditor() {
     if (modContext?.selectedFile != null && modContext != null) {
       const filePath = modContext.selectedFile.path;
       // Получем обновленный контент блока и конвертим в строку
-      const jsonContent = JSON.stringify(updatedBlock, null, 2);
+      const jsonContent = JSON.stringify(updatedBlock, (key, value) => {
+        if (value === null) {
+          return undefined; // Пропуск свойств с null
+        }
+        return value;
+      }, 2);
       const isSaved = await window.electron.ipcRenderer.invokeSaveFileContent(filePath, jsonContent);
       if (!isSaved) {
         // TODO Показывает алерт с ошибкой записи

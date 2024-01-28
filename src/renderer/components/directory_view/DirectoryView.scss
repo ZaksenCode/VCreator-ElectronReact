@@ -1,8 +1,12 @@
 .directory-view {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
+  flex-shrink: 0;
+  overflow-x: auto;
   padding: 4px 6px;
-
   .directory-item {
+    flex-shrink: 0;
     color: white;
     font-weight: 500;
     font-size: 16px;
